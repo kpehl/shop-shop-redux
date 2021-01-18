@@ -27,8 +27,17 @@ function ProductList() {
       data.products.forEach((product) => {
         idbPromise('products', 'put', product);
       });
+    } else if (!loading) {
+      // if loading is undefined, the user is offline - get data from the `products` store in IndexedDB
+      idbPromise('products', 'get').then((products) => {
+        // use the IndexedDB data to set the global state for offline browsing
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: products
+        });
+      });
     }
-  }, [data, loading, dispatch])
+  }, [data, loading, dispatch]);
 
   function filterProducts() {
     if (!currentCategory) {
