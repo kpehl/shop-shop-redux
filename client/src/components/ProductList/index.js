@@ -8,19 +8,27 @@ import spinner from "../../assets/spinner.gif"
 import { useStoreContext } from "../../utils/GlobalState";
 import { UPDATE_PRODUCTS } from "../../utils/actions";
 
+import { idbPromise } from "../../utils/helpers";
+
 function ProductList() {
   const [state, dispatch] = useStoreContext();
   const { currentCategory } = state;
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   useEffect(() => {
+    // when there is data to be stored
     if (data) {
+      // store in the global state object
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products
       });
+      // and store it in IndexedDB
+      data.products.forEach((product) => {
+        idbPromise('products', 'put', product);
+      });
     }
-  }, [data, dispatch])
+  }, [data, loading, dispatch])
 
   function filterProducts() {
     if (!currentCategory) {
