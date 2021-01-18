@@ -10,6 +10,8 @@ import { UPDATE_PRODUCTS, REMOVE_FROM_CART, UPDATE_CART_QUANTITY, ADD_TO_CART } 
 
 import Cart from "../components/Cart";
 
+import { idbPromise } from "../utils/helpers";
+
 function Detail() {
   const [state, dispatch] = useStoreContext();
   const { id } = useParams();
@@ -21,15 +23,29 @@ function Detail() {
   const { products, cart } = state;
   
   useEffect(() => {
+    // data already in the global state
     if (products.length) {
       setCurrentProduct(products.find(product => product._id === id));
     } else if (data) {
+      // retrieve data from the server
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products
       });
+      // and store that data in IndexedDB
+      data.products.forEach((product) => {
+        idbPromise('products', 'put', product);
+      });
+    // if the user is offline, use the cached data in IndexedDB
+    } else if (!loading) {
+      idbPromise('products', 'get').then((indexedProducts) => {
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: indexedProducts
+        });
+      });
     }
-  }, [products, data, dispatch, id]);
+  }, [products, data, loading, dispatch, id]);
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === id);
