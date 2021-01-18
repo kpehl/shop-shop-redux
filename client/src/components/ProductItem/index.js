@@ -15,11 +15,26 @@ function ProductItem(item) {
   } = item;
 
   const [state, dispatch] = useStoreContext();
+
+  const { cart } = state;
+
   const addToCart = () => {
-    dispatch({
-      type: ADD_TO_CART,
-      product: { ...item, purchaseQuantity: 1 }
-    });
+    // check for a matching item in the cart
+    const itemInCart = cart.find((cartItem) => cartItem._id === _id);
+
+    // if there is a match, use UPDATE and update the purchase quantity, otherwise use ADD
+    if(itemInCart) {
+      dispatch({
+        type: UPDATE_CART_QUANTITY,
+        _id: _id,
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
+      });
+    } else {
+      dispatch({
+        type: ADD_TO_CART,
+        product: { ...item, purchaseQuantity: 1 }
+      });
+    }
   };
 
   return (
