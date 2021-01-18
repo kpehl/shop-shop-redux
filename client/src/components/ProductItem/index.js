@@ -4,6 +4,7 @@ import { pluralize } from "../../utils/helpers"
 
 import { useStoreContext } from '../../utils/GlobalState';
 import { ADD_TO_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
+import { idbPromise } from '../../utils/helpers';
 
 function ProductItem(item) {
   const {
@@ -22,11 +23,15 @@ function ProductItem(item) {
     // check for a matching item in the cart
     const itemInCart = cart.find((cartItem) => cartItem._id === _id);
 
-    // if there is a match, use UPDATE and update the purchase quantity, otherwise use ADD
+    // if there is a match, use UPDATE and update the purchase quantity, otherwise use ADD; store data in IndexedDB as well
     if(itemInCart) {
       dispatch({
         type: UPDATE_CART_QUANTITY,
         _id: _id,
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
+      });
+      idbPromise('cart', 'put', {
+        ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
     } else {
@@ -34,6 +39,7 @@ function ProductItem(item) {
         type: ADD_TO_CART,
         product: { ...item, purchaseQuantity: 1 }
       });
+      idbPromise('cart', 'put', { ...item, purchaseQuantity: 1 });
     }
   };
 
