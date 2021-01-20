@@ -1,12 +1,12 @@
-# 🛍️-Shop-Shop
+# 🛍️-Shop-Shop-Redux
 
-  ![GitHub](https://img.shields.io/github/license/kpehl/shop-shop?style=plastic)
+  ![GitHub](https://img.shields.io/github/license/kpehl/shop-shop-redux?style=plastic)
   
-  ![Most recent commit](https://img.shields.io/github/last-commit/kpehl/shop-shop)
-  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kpehl/shop-shop)
+  ![Most recent commit](https://img.shields.io/github/last-commit/kpehl/shop-shop-redux)
+  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kpehl/shop-shop-redux)
 
 ## Project Description
-This project refactors a fictional e-commerce application to use Redux-esque global state control using React libraries. Stripe is used for payments.  
+This project refactors a fictional e-commerce application to use Redux for global state control, paired with a React front end, Node.js and Express.js for the back-end server, and MongoDB for the database. Stripe is used for payments.  
 
 ## Installation
 If you would like to modify the code, clone the project onto your computer, and run `npm install` in the root directory, in the client directory, and in the server directory.
@@ -14,7 +14,7 @@ If you would like to modify the code, clone the project onto your computer, and 
 From the root directory, type `npm start` to start the Express and GraphQL/Apollo servers. The homepage of the application will open in your default browser.
 
 ## Usage
-The application is deployed at: https://damp-brushlands-27685.herokuapp.com/
+The application is deployed at: https://obscure-shelf-50048.herokuapp.com/ 
 
 You can log in as 
 `fake@email.com`
